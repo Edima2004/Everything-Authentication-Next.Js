@@ -10,6 +10,7 @@ export const authRoutes = [
 
    "/auth/login",
    "/auth/register",
+   "/auth/error"
 ]
 
 //prefix for API authentication routes
