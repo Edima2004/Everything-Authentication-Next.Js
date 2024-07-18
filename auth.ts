@@ -20,23 +20,23 @@ export const {
 	signIn,
 	signOut,
 } = NextAuth({
-	pages:{
-		signIn : "/auth/login",
-		error: "/auth/error"
+	pages: {
+		signIn: '/auth/login',
+		error: '/auth/error',
 	},
 
-	events:{
-		async linkAccount({user}){
+	events: {
+		async linkAccount({ user }) {
 			await db.user.update({
 				where: { id: user.id },
-				data: { emailVerified: new Date()}
-			})
-		}
+				data: { emailVerified: new Date() },
+			});
+		},
 	},
 	callbacks: {
 		//async signIn({ user, account, profile, email, credentials }) {
-		//	//console.log(user);
-			
+			//console.log(user);
+
 		//	const existingUser = await getUserById(user.id ?? '');
 
 		//	if(!existingUser || !existingUser.emailVerified){
@@ -44,7 +44,20 @@ export const {
 		//	}
 		//	return true;
 		//},
+		async signIn({ user, account }) {			
+			// Allow OAuth without email verification
+			if (account?.type !== 'credentials') return true;
 
+			if (user.id) {
+				const existingUser = await getUserById(user.id);
+				//prevent signin without email verification
+				if (!existingUser?.emailVerified) return false;
+
+				//TODO 2FA check
+			}
+
+			return true;
+		},
 		async session({ session, token }) {
 			if (token.sub && session.user) {
 				session.user.id = token.sub;

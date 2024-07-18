@@ -1,7 +1,7 @@
 //Array of accessible routes
 export const publicRoutes = [
-   
    "/",
+   "/auth/new-verification"
 ]
 
 //Array of authenticated routes

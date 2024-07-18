@@ -45,12 +45,9 @@ const LoginForm = () => {
 
 		startTransition(() => {
 			Login(values).then((data) => {
-				console.log(data);
-				//console.log(values);
-				// 'clyjzzxz900027wyt6cpibnms'
-				setError(data.error);
-				//!TODO: add when we add 2FA
-				//setSuccess(data.success);
+				//console.log(data);
+				setError(data?.error);
+				setSuccess(data?.success);
 			});
 		});
 	};
