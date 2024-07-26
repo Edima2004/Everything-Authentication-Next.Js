@@ -1,25 +1,21 @@
-import { auth, signOut } from '@/auth';
+'use client';
+import { logOut } from '@/actions/logout';
+import { useCurrentUser } from '@/hooks/use-current-user';
 
-const SettingsPage = async () => {
-	const session = await auth();
-	
+const SettingsPage = () => {
+	const user = useCurrentUser();
+	const onClick = () => {
+		logOut();
+	};
+
 	return (
-		<div>
-			{/*Settings Page*/}
-			{JSON.stringify(session)}
-			<form
-				action={async () => {
-					'use server';
-					await signOut();
-				}}
-			>
+		<div className='bg-white p-10 rounded-xl'>
+			{/*{JSON.stringify(user)}*/}
 				<button
 					type="submit"
-					className="p-3 text-white bg-gray-700 rounded-full"
-				>
+					onClick={onClick}>
 					Sign Out
 				</button>
-			</form>
 		</div>
 	);
 };

@@ -51,6 +51,10 @@ const LoginForm = () => {
 					form.reset();
 					setError(data?.error);
 				}
+				if(data?.clearTwoFactorInput){
+					form.reset();
+					//setError(data?.error);
+				}
 				if(data?.success){
 					form.reset();
 					setSuccess(data?.success);

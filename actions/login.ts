@@ -14,7 +14,7 @@ import { sendVerificationEmail, sendTwoFactorTokenEmail } from '@/lib/mail';
 import { db } from '@/lib/db';
 import { getTwoFactorTokenByEmail } from '@/data/two-factor-token';
 import { getTwoFactorConfirmationByUserId } from '@/data/two-factor-confirmation';
-import bcrypt from "bcryptjs"
+import bcrypt from 'bcryptjs';
 
 export const Login = async (values: z.infer<typeof LoginSchema>) => {
 	const validatedFields = LoginSchema.safeParse(values);
@@ -52,10 +52,11 @@ export const Login = async (values: z.infer<typeof LoginSchema>) => {
 		if (code) {
 			const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email);
 			if (!twoFactorToken) {
-				return { error: 'Invalid code!' };
+				return { error: 'Invalid code!'};
 			}
 			if (twoFactorToken.token !== code) {
-				return { error: 'Invalid code!' };
+				window.location.reload(); //! Find a replacement later
+				return { error: 'Invalid code!', clearTwoFactorInput: true  };
 			}
 			const hasExpired = new Date(twoFactorToken.expires) < new Date();
 			if (hasExpired) {
