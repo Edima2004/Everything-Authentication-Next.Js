@@ -5,8 +5,9 @@ import { db } from './lib/db';
 import { getUserById } from './data/user';
 import { getTwoFactorConfirmationByUserId } from './data/two-factor-confirmation';
 
-type ExtendedUser = DefaultSession['user'] & {
+export type ExtendedUser = DefaultSession['user'] & {
 	role: 'ADMIN' | 'USER';
+	isTwoFactorEnabled: boolean;
 };
 
 declare module 'next-auth' {
@@ -78,6 +79,9 @@ export const {
 			if (token.role && session.user) {
 				session.user.role = token.role as 'ADMIN' | 'USER';
 			}
+			if (session.user) {
+				session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean
+			}
 			return session;
 		},
 
@@ -88,6 +92,7 @@ export const {
 
 			if (!existingUser) return token;
 			token.role = existingUser.role;
+			token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
 			//console.log('JWT: ', token);
 			return token;
 		},

@@ -3,13 +3,13 @@ import { logOut } from '@/actions/logout';
 import { useCurrentUser } from '@/hooks/use-current-user';
 
 const SettingsPage = () => {
-	const user = useCurrentUser();
+	//const user = useCurrentUser();
 	const onClick = () => {
 		logOut();
 	};
 
 	return (
-		<div className='bg-white p-10 rounded-xl'>
+		<div className='bg-white p-3 px-8 rounded-xl'>
 			{/*{JSON.stringify(user)}*/}
 				<button
 					type="submit"

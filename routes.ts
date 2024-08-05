@@ -4,6 +4,7 @@ export const publicRoutes = [
    "/",
    "/auth/new-verification",
    "/extras/display",
+   "/extras/get-api",
 ]
 
 //Array of authenticated routes
