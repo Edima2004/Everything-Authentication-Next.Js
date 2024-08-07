@@ -11,7 +11,7 @@ function Home() {
 				</h1>
 				<p className="text-white text-lg">A simple authentication service</p>
 				<div>
-					<LoginButton>
+					<LoginButton mode='modal' asChild>
 						<Button
 							type="submit"
 							className="px-5 py-3 bg-white font-bold rounded-lg text-black"

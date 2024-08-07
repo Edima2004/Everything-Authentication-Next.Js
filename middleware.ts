@@ -10,34 +10,36 @@ import {
 import { NextAuthRequest } from 'next-auth/lib';
 
 const { auth } = NextAuth(authConfig);
-export default auth((req: NextAuthRequest) => {
-	//console.log(req);
+export default auth((req) => {
 	const { nextUrl } = req;
 	const isLoggedIn = !!req.auth;
 
 	const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
 	const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
-
 	const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
 	if (isApiAuthRoute) {
-		return null;
+		return;
 	}
+
 	if (isAuthRoute) {
 		if (isLoggedIn) {
 			return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
 		}
-		return null;
+		return;
 	}
 
 	if (!isLoggedIn && !isPublicRoute) {
-		return Response.redirect(new URL('/auth/login', nextUrl));
-	}
-	return null;
+		let callbackUrl = nextUrl.pathname;
+		if (nextUrl.search) {
+			callbackUrl += nextUrl.search;
+		}
 
-	//const isLoggedIn = !!req.auth;
-	//console.log('ROUTE: ', req.nextUrl.pathname);
-	//console.log('IS LOGGED IN: ', isLoggedIn);
+		const encodedCallbackUrl = encodeURIComponent(callbackUrl);
+
+		return Response.redirect(new URL(
+			`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl));
+	}
 });
 
 // Optionally, don't invoke Middleware on some paths

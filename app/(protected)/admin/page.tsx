@@ -1,21 +1,34 @@
 "use client"
 
+import { admin } from "@/actions/admin";
 import { RoleGate } from "@/components/auth/role-gate";
 import { FormSuccess } from "@/components/form-success";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useCurrentRole } from "@/hooks/use-current-role";
+import { toast } from "sonner";
 //import { currentRole } from "@/lib/auth";
 
 const AdminPage = async()=>{
+   const onServerHandleClick= ()=>{
+      admin()
+      .then((data)=>{
+         if(data.error){
+            toast.error(data.error)
+         }
+         else{
+            toast.success(data.success)
+         }
+      })
+   }
    const onApiRouteClick = ()=>{
       fetch("/api/admin")
       .then((response)=>{
          if(response.ok){
-            console.log("OKAY");
+            toast.success("Allowed API Route!")
          }
          else{
-            console.error("FORBIDDEN");
+            toast.error('Forbidden API Route!');
          }
       })
    }
@@ -44,7 +57,10 @@ const AdminPage = async()=>{
                <p className="text-sm font-medium">
                   Admin-only Server Action
                </p>
-               <Button>
+               <Button
+               onClick={onApiRouteClick}
+               //onClick={onServerHandleClick} =>for server
+               >
                   Click to test
                </Button>
             </div>
